@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
 {% block blogctive %} active {% endblock blogctive %}
 
-{% block title %} blog home {% endblock title %} 
+{% block title %} Search Results {% endblock title %} 
 
 {% block body %}
 <div class="container-xl my-3">
-<h2>Coding Articles: </h2>
+<h2>Search Results:  </h2>
+{% if allPosts|length < 1 %}
+    <p> 
+            Your Search - <b>{{query}}</b> - did not match any Documents.
+
+            <ul>
+            <li>
+                Try diffrent Keywords
+            </li>
+            </ul>
+    </p>
+{% endif %}
 
 {% for post in allPosts %}
 
