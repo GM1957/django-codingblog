@@ -5,6 +5,7 @@ from blog.models import Post
 from django.contrib.auth.models import User
 # Create your views here.
 from django.shortcuts import render, HttpResponse,redirect
+from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
 
@@ -75,7 +76,7 @@ def handleSignup(request):
             return redirect('home') 
 
         # create the user
-        myuser = User.objects.create(username=username,email=email,password=pass1)
+        myuser = User.objects.create_user(username=username,email=email,password=pass1)
         myuser.first_name = fname
         myuser.last_name = lname
     
@@ -85,3 +86,23 @@ def handleSignup(request):
     
     else:
         return HttpResponse('404 - Not Allowed')    
+
+def handleLogin(request):
+    if request.method == 'POST':
+        loginusername = request.POST.get("loginusername",'')
+        loginpass = request.POST.get("loginpass",'')
+        user = authenticate(username = loginusername, password = loginpass)
+
+        if user is not None:
+            login(request,user)
+            messages.success(request,"successfully logged in")
+            return redirect('home')
+        else:
+            messages.warning(request,"invalid Credentials please try again")  
+            return redirect('home')  
+    return HttpResponse("404 - Not Found")
+def handleLogout(request):
+    logout(request)
+    messages.success(request,"successfully logged Out")
+    return redirect('home')
+    return HttpResponse("yo logout")
